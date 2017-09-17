@@ -30,7 +30,7 @@ func IsDir(dir string) errstack.E {
 	stat, err := os.Stat(dir)
 	if err != nil {
 		return errstack.WrapAsReqF(err, "")
-	} else if stat.IsDir() {
+	} else if !stat.IsDir() {
 		return errstack.NewReq("Expected path to a directory. Got path to a file.")
 	}
 	return nil
