@@ -21,9 +21,9 @@ func DecodeJSON(r io.Reader, dest interface{}) errstack.E {
 // DecodeJSONFile as `DecodeJSON` but reads data from the file.
 func DecodeJSONFile(fname string, dest interface{}, logger errstack.Logger) errstack.E {
 	f, err := os.Open(fname)
-	defer errstack.CallAndLog(logger, f.Close)
 	if err != nil {
 		return errstack.WrapAsInf(err, "Can't open contract schema file: "+fname)
 	}
+	defer errstack.CallAndLog(logger, f.Close)
 	return DecodeJSON(f, dest)
 }
