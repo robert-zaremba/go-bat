@@ -62,3 +62,17 @@ func CmpInt64Pairs(ls [][2]int64) int {
 	}
 	return 0
 }
+
+// Min3Int returns the minimum of 3 integeres.
+func Min3Int(a, b, c int) int {
+	if a < b {
+		if a < c {
+			return a
+		}
+	} else {
+		if b < c {
+			return b
+		}
+	}
+	return c
+}

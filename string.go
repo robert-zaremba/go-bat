@@ -101,6 +101,34 @@ func MatchesPrefixes(s string, prefixes []string) bool {
 	return false
 }
 
+// Levenshtein computes the Levenshtein distance. It's a measure of the similarity between
+// two strings, which we will refer to as the source string (s) and the target string (t).
+// The distance is the number of deletions, insertions, or substitutions required to transform
+// s into t. For example, the Levenshtein distance between "Asheville" and "Arizona" is 8.
+func Levenshtein(str1, str2 []rune) int {
+	s1len := len(str1)
+	s2len := len(str2)
+	column := make([]int, len(str1)+1)
+
+	for y := 1; y <= s1len; y++ {
+		column[y] = y
+	}
+	for x := 1; x <= s2len; x++ {
+		column[0] = x
+		lastkey := x - 1
+		for y := 1; y <= s1len; y++ {
+			oldkey := column[y]
+			var incr int
+			if str1[y-1] != str2[x-1] {
+				incr = 1
+			}
+			column[y] = Min3Int(column[y]+1, column[y-1]+1, lastkey+incr)
+			lastkey = oldkey
+		}
+	}
+	return column[s1len]
+}
+
 // StrIterator provides a generator of names / strings
 type StrIterator interface {
 	Get() string
