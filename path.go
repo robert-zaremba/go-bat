@@ -17,6 +17,13 @@ func IsFile(filename string) errstack.E {
 	return nil
 }
 
+// IsFileErrp check if `filename` is a valid path to a file and sets the error in the putter.
+func IsFileErrp(filename string, errp errstack.Putter) {
+	if err := IsFile(filename); err != nil {
+		errp.Put(err)
+	}
+}
+
 // AssertIsFile calls IsFile and panics if error is returned.
 // `key` is the log argument to name the path entity.
 func AssertIsFile(filename, key string, logger Logger) {
@@ -34,6 +41,13 @@ func IsDir(dir string) errstack.E {
 		return errstack.NewReq("Expected path to a directory. Got path to a file.")
 	}
 	return nil
+}
+
+// IsDirErrp check if `dir` is a valid path to a directory  and sets the error in the putter.
+func IsDirErrp(dir string, errp errstack.Putter) {
+	if err := IsFile(dir); err != nil {
+		errp.Put(err)
+	}
 }
 
 // AssertIsDir calls IsDir and panics if error is returned.

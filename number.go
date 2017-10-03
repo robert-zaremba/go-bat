@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+
+	"github.com/robert-zaremba/errstack"
 )
 
 // I64toa converts int64 value to 10-based string
@@ -31,9 +33,27 @@ func Atoi64(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }
 
+// Atoi64Errp converts 10-based string into int64 value and sets the error in the putter.
+func Atoi64Errp(s string, errp errstack.Putter) int64 {
+	v, err := Atoi64(s)
+	if err != nil {
+		errp.Put(err)
+	}
+	return v
+}
+
 // Atof64 converts 10-based string into float64 value.
 func Atof64(s string) (float64, error) {
 	return strconv.ParseFloat(s, 64)
+}
+
+// Atof64Errp converts 10-based string into float64 value and sets the error in the putter.
+func Atof64Errp(s string, errp errstack.Putter) float64 {
+	v, err := Atof64(s)
+	if err != nil {
+		errp.Put(err)
+	}
+	return v
 }
 
 // HumanizeInt produces a human readable representation of an SI size.
