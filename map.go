@@ -58,7 +58,7 @@ func StrStrMapKeys(m map[string]string) []string {
 
 // Int64BoolMapKeys returns a sorted list of keys from a map[int64]bool
 func Int64BoolMapKeys(m map[int64]bool) []int64 {
-	keys := make([]int64, len(m), len(m))
+	keys := make([]int64, len(m))
 	i := 0
 	for s := range m {
 		keys[i] = s
