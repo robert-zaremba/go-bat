@@ -42,6 +42,20 @@ func Atoi64Errp(s string, errp errstack.Putter) int64 {
 	return v
 }
 
+// Atoui64 converts 10-based string into uint64 value.
+func Atoui64(s string) (uint64, error) {
+	return strconv.ParseUint(s, 10, 64)
+}
+
+// Atoui64Errp converts 10-based string into uint64 value and sets the error in the putter.
+func Atoui64Errp(s string, errp errstack.Putter) uint64 {
+	v, err := Atoui64(s)
+	if err != nil {
+		errp.Put(err)
+	}
+	return v
+}
+
 // Atof64 converts 10-based string into float64 value.
 func Atof64(s string) (float64, error) {
 	return strconv.ParseFloat(s, 64)
