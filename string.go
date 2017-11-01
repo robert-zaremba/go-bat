@@ -2,10 +2,8 @@ package bat
 
 import (
 	"math/rand"
-	"reflect"
 	"regexp"
 	"strings"
-	"unsafe"
 
 	"github.com/mozillazg/go-unidecode"
 )
@@ -71,24 +69,6 @@ func RmDiacritics(s string) string {
 // where random long integer is serialized into hex string
 func RandomCode() string {
 	return I64tox(rand.Int63())
-}
-
-// UnsafeByteArrayToStr uses unsafe to convert byte array into string. Supplied array cannot be
-// altered after this functions is called
-func UnsafeByteArrayToStr(b []byte) string {
-	if b == nil {
-		return ""
-	}
-	return *(*string)(unsafe.Pointer(&b))
-}
-
-// UnsafeStrToByteArray uses unsafe to convert string into byte array. Returned array cannot be
-// altered after this functions is called
-func UnsafeStrToByteArray(s string) []byte {
-	sh := *(*reflect.SliceHeader)(unsafe.Pointer(&s))
-	sh.Cap = sh.Len
-	bs := *(*[]byte)(unsafe.Pointer(&sh))
-	return bs
 }
 
 // MatchesPrefixes checks if given string has a prefix from given prefix list
