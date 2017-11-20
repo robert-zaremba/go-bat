@@ -13,6 +13,9 @@ import (
 func DecodeJSON(r io.Reader, dest interface{}) errstack.E {
 	err := json.NewDecoder(r).Decode(dest)
 	if err == io.EOF {
+		if rc, ok := r.(io.ReadCloser); ok {
+			return errstack.WrapAsInf(rc.Close(), "Can't close Reader")
+		}
 		return nil
 	}
 	return errstack.WrapAsInf(err, "Can't decode JSON data into given structure")
