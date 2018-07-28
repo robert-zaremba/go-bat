@@ -13,18 +13,18 @@ import (
 // FindRoot returns an absolute path to the project root, defined by the existance of
 // .git directory or .hg directory based on the caller stack trace or path to
 // the executable file.
-// It takes one optional parameter: number of directories to travers up to search for the
-// project root. Be default it's 6.
-func FindRoot(levels ...uint) (string, errstack.E) {
-	var levelsUp uint = 6
-	if len(levels) >= 1 {
-		levelsUp = levels[0]
+// It takes one optional argument: `callerSkip` -- the number of additional stack frames
+// to skip above *this* function call to use in by te stack trace strategy.
+func FindRoot(callerSkipOpt ...uint) (string, errstack.E) {
+	var callerSkip uint = 2
+	if len(callerSkipOpt) >= 1 {
+		callerSkip += callerSkipOpt[0]
 	}
-	root, callerErr := findRootFromRuntimeCaller(2, levelsUp)
+	root, callerErr := findRootFromRuntimeCaller(int(callerSkip), 6)
 	if callerErr == nil {
 		return root, nil
 	}
-	root, executableErr := findRootFromExecutable(levelsUp)
+	root, executableErr := findRootFromExecutable(6)
 	if executableErr == nil {
 		return root, nil
 	}
@@ -34,10 +34,8 @@ func FindRoot(levels ...uint) (string, errstack.E) {
 
 // findRootFromRuntimeCaller - as `FindRoot`, but limits the search strategy to looking
 // up based on the stack trace.
-// The argument `callerSkip` is the number of stack frames to ascend, as specified
-// in `runtimeCaller`
 func findRootFromRuntimeCaller(callerSkip int, levels uint) (string, error) {
-	_, filename, _, ok := runtime.Caller(1)
+	_, filename, _, ok := runtime.Caller(callerSkip)
 	if !ok {
 		return "", fmt.Errorf("Can't retrive runtime caller info")
 	}
