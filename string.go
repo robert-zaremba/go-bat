@@ -1,7 +1,6 @@
 package bat
 
 import (
-	"math/rand"
 	"regexp"
 	"strings"
 
@@ -63,12 +62,6 @@ func TrimSuffixes(s string, suffixes ...string) string {
 // diacritics are removed from it. If removing diacritics is not possible, character is removed.
 func RmDiacritics(s string) string {
 	return unidecode.Unidecode(s)
-}
-
-// RandomCode generates a random code
-// where random long integer is serialized into hex string
-func RandomCode() string {
-	return I64tox(rand.Int63())
 }
 
 // MatchesPrefixes checks if given string has a prefix from given prefix list

@@ -73,20 +73,3 @@ func TestRmDiacritics(t *testing.T) {
 		}
 	}
 }
-
-func TestRandomCode(t *testing.T) {
-	n := 10000
-	m := map[string]struct{}{}
-	for i := 0; i < n; i++ {
-		m[RandomCode()] = struct{}{}
-	}
-	if len(m) != n {
-		t.Errorf("Expected %d, got %d", n, len(m))
-	}
-}
-
-func BenchmarkRandomCode(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = RandomCode()
-	}
-}
