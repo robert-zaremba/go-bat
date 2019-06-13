@@ -28,7 +28,7 @@ func FindRoot(callerSkipOpt ...uint) (string, errstack.E) {
 	if executableErr == nil {
 		return root, nil
 	}
-	return root, errstack.WrapAsInf(
+	return root, errstack.WrapAsIO(
 		errstack.Join(callerErr, executableErr), "Can't locate project root")
 }
 
