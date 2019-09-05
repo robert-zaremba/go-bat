@@ -21,7 +21,7 @@ func TestStrBoolMapKeys(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		result := StrBoolMapKeys(test)
+		result := MapKeysStrBool(test)
 		sort.Strings(result)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
@@ -46,7 +46,7 @@ func TestStrBoolMapSortedKeys(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		result := StrBoolMapSortedKeys(test)
+		result := MapSortedKeysStrBool(test)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
 		}
@@ -68,7 +68,7 @@ func TestInt64BoolMapKeys(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		result := Int64BoolMapKeys(test)
+		result := MapKeysInt64Bool(test)
 		sort.Slice(result, func(i, j int) bool { return result[i] < result[j] })
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
@@ -78,11 +78,11 @@ func TestInt64BoolMapKeys(t *testing.T) {
 
 func TestUpdateStrStrMap(t *testing.T) {
 	var dest map[string]string
-	UpdateStrStrMap(nil, &dest)
+	MapUpdateStrStr(nil, &dest)
 	if dest != nil {
 		t.Error("dest should be nil since source is nil", dest)
 	}
-	UpdateStrStrMap(map[string]string{"a": "A"}, &dest)
+	MapUpdateStrStr(map[string]string{"a": "A"}, &dest)
 	if _, ok := dest["a"]; !ok {
 		t.Fatal("'a' should be in dest", dest)
 	}
@@ -90,7 +90,7 @@ func TestUpdateStrStrMap(t *testing.T) {
 
 func TestStrInterfaceMap(t *testing.T) {
 	var dest map[string]interface{}
-	UpdateStrInterfaceMap(nil, &dest)
+	MapUpdateStrInterface(nil, &dest)
 	if dest != nil {
 		t.Error("dest should be nil since source is nil", dest)
 	}
@@ -99,7 +99,7 @@ func TestStrInterfaceMap(t *testing.T) {
 		"intSlice": []int{1, 13},
 		"nil":      nil,
 	}
-	UpdateStrInterfaceMap(src, &dest)
+	MapUpdateStrInterface(src, &dest)
 	if !reflect.DeepEqual(dest["bytes"], []byte("agflow")) ||
 		!reflect.DeepEqual(dest["intSlice"], []int{1, 13}) ||
 		dest["nil"] != nil {
@@ -110,7 +110,7 @@ func TestStrInterfaceMap(t *testing.T) {
 func TestCloneMapStrInterface(t *testing.T) {
 	t.Skip("What if map contains reference types? i.e. Should pointers be followed?")
 	var m1 map[string]interface{}
-	m2 := CloneMapStrInterface(m1)
+	m2 := MapCloneStrInterface(m1)
 	if m2 == nil {
 		t.Fatal("m2 must be empty map", m1, m2)
 	}
@@ -119,7 +119,7 @@ func TestCloneMapStrInterface(t *testing.T) {
 		"t1": struct{ test bool }{false},
 		"t2": []int{3, 2, 1},
 	}
-	m2 = CloneMapStrInterface(m1)
+	m2 = MapCloneStrInterface(m1)
 	if !reflect.DeepEqual(m1, m2) {
 		t.Error("m2 is expected to be same with m1", m1, m2)
 	}
@@ -136,14 +136,15 @@ func TestStrSliceToMap(t *testing.T) {
 		{"a"},
 		{"b", "a"},
 	}
-	expects := []map[string]bool{
+	emptyS := struct{}{}
+	expects := []map[string]struct{}{
 		{},
 		{},
-		{"a": true},
-		{"a": true, "b": true},
+		{"a": emptyS},
+		{"a": emptyS, "b": emptyS},
 	}
 	for i, test := range tests {
-		result := StrSliceToMap(test)
+		result := SliceStrToMap(test)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
 		}
@@ -165,7 +166,7 @@ func TestReverseStrStrMap(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		result := ReverseStrStrMap(test)
+		result := MapReverseStrStr(test)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
 		}

@@ -3,11 +3,22 @@ package bat
 import (
 	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/mozillazg/go-unidecode"
 )
 
 var stripper = regexp.MustCompile("  +")
+
+// StrIsWhitespace check if string contains only whitespace characters
+func StrIsWhitespace(s string) bool {
+	for _, r := range s {
+		if !unicode.IsSpace(r) {
+			return false
+		}
+	}
+	return true
+}
 
 // StrJoin joins all tail arguments using the first argument
 func StrJoin(sep string, args ...string) string {

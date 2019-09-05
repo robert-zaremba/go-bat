@@ -16,7 +16,7 @@ func TestStrSliceIdx(t *testing.T) {
 	testStrs := []string{"", "a", "a", "c", "e"}
 	expects := []int{-1, -1, 0, -1, 4}
 	for i, str := range testStringSlices {
-		j := StrSliceIdx(str, testStrs[i])
+		j := SliceStrIdx(str, testStrs[i])
 		if expects[i] != j {
 			t.Errorf("%d: Expected %d, got %d", i, expects[i], j)
 		}
@@ -34,7 +34,7 @@ func TestIntSliceIdx(t *testing.T) {
 	testInts := []int{0, 0, 0, 0, 0}
 	expects := []int{-1, -1, 0, -1, 4}
 	for i, is := range testIntSlices {
-		j := IntSliceIdx(is, testInts[i])
+		j := SliceIntIdx(is, testInts[i])
 		if expects[i] != j {
 			t.Errorf("%d: Expected %d, got %d", i, expects[i], j)
 		}
@@ -61,7 +61,7 @@ func TestStrSliceSliceIdx(t *testing.T) {
 	expects := []int{-1, -1, 0, 0, -1, 2}
 
 	for i, s := range testStringSlice {
-		j := StrSliceSliceIdx(s, testStrs[i])
+		j := SliceStrSliceIdx(s, testStrs[i])
 		if expects[i] != j {
 			t.Errorf("%d: Expected %d, got %d", i, expects[i], j)
 		}
@@ -111,7 +111,7 @@ func TestStrSliceConcat(t *testing.T) {
 	}
 
 	for i, s := range tests {
-		result := StrSliceConcat(s...)
+		result := SliceStrConcat(s...)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
 		}
@@ -146,7 +146,7 @@ func TestStrsSimilar(t *testing.T) {
 		{"4", "3", "2", "1"},
 	}
 	for i, s := range tests {
-		if !StrsSimilar(s, expects[i]) {
+		if !StrsSame(s, expects[i]) {
 			t.Errorf("%d: %v is expected to be similar to %v", i, s, expects[i])
 		}
 	}
@@ -172,7 +172,7 @@ func TestStrSliceUniqueAppend(t *testing.T) {
 		{"a"},
 	}
 	for i, s := range sources {
-		result := StrSliceUniqueAppend(s, adds[i]...)
+		result := SliceStrUniqueAppend(s, adds[i]...)
 		if !reflect.DeepEqual(result, expects[i]) {
 			t.Errorf("%d: Expected %v, got %v", i, expects[i], result)
 		}
@@ -180,13 +180,33 @@ func TestStrSliceUniqueAppend(t *testing.T) {
 }
 
 func TestEmptyStrSliceAsNil(t *testing.T) {
-	if EmptyStrSliceAsNil(nil) != nil {
+	if SliceStrAsNil(nil) != nil {
 		t.Errorf("nil shouldn't be changed")
 	}
-	if EmptyStrSliceAsNil([]string{}) != nil {
+	if SliceStrAsNil([]string{}) != nil {
 		t.Errorf("empty slice should be nil")
 	}
-	if EmptyStrSliceAsNil([]string{"a"}) == nil {
+	if SliceStrAsNil([]string{"a"}) == nil {
 		t.Errorf("Not empty slice shouldn't be changed")
+	}
+}
+
+func TestStrsOnlyWhitespace(t *testing.T) {
+	type TC struct {
+		strs     []string
+		expected bool
+	}
+	tcases := []TC{
+		{[]string{}, true},
+		// {[]string{"", " ", "   "}, true},
+		// {[]string{"", " ", "\n\n "}, true},
+		{[]string{"", "  x\n"}, false},
+		{[]string{"x"}, false},
+	}
+	for _, tc := range tcases {
+		r := StrsOnlyWhitespace(tc.strs)
+		if r != tc.expected {
+			t.Error("For ", tc.strs, "got: ", r, "; expected: ", tc.expected)
+		}
 	}
 }

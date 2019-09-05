@@ -2,8 +2,8 @@ package bat
 
 import "sort"
 
-// StrBoolMapKeys returns a list of keys from a map[string]bool
-func StrBoolMapKeys(m map[string]bool) []string {
+// MapKeysStrBool returns a list of keys from a map[string]bool
+func MapKeysStrBool(m map[string]bool) []string {
 	keys := make([]string, len(m))
 	i := 0
 	for s := range m {
@@ -13,15 +13,15 @@ func StrBoolMapKeys(m map[string]bool) []string {
 	return keys
 }
 
-// StrBoolMapSortedKeys returns a list of sorted keys from a map[string]bool
-func StrBoolMapSortedKeys(m map[string]bool) []string {
-	ls := StrBoolMapKeys(m)
+// MapSortedKeysStrBool returns a list of sorted keys from a map[string]bool
+func MapSortedKeysStrBool(m map[string]bool) []string {
+	ls := MapKeysStrBool(m)
 	sort.Strings(ls)
 	return ls
 }
 
-// StrStructMapKeys returns a sorted list of keys from a map[string]struct{}
-func StrStructMapKeys(m map[string]struct{}) []string {
+// MapKeysStrStruct returns a sorted list of keys from a map[string]struct{}
+func MapKeysStrStruct(m map[string]struct{}) []string {
 	keys := make([]string, len(m))
 	i := 0
 	for s := range m {
@@ -32,8 +32,8 @@ func StrStructMapKeys(m map[string]struct{}) []string {
 	return keys
 }
 
-// StrInterfaceMapKeys returns a sorted list of keys from a map[string]nterface{}
-func StrInterfaceMapKeys(m map[string]interface{}) []string {
+// MapKeysStrInterface returns a sorted list of keys from a map[string]nterface{}
+func MapKeysStrInterface(m map[string]interface{}) []string {
 	keys := make([]string, len(m))
 	i := 0
 	for s := range m {
@@ -44,8 +44,8 @@ func StrInterfaceMapKeys(m map[string]interface{}) []string {
 	return keys
 }
 
-// StrStrMapKeys returns a sorted list of keys from map[string]string
-func StrStrMapKeys(m map[string]string) []string {
+// MapKeysStrStr returns a sorted list of keys from map[string]string
+func MapKeysStrStr(m map[string]string) []string {
 	keys := make([]string, len(m))
 	i := 0
 	for s := range m {
@@ -56,8 +56,8 @@ func StrStrMapKeys(m map[string]string) []string {
 	return keys
 }
 
-// Int64BoolMapKeys returns a sorted list of keys from a map[int64]bool
-func Int64BoolMapKeys(m map[int64]bool) []int64 {
+// MapKeysInt64Bool returns a sorted list of keys from a map[int64]bool
+func MapKeysInt64Bool(m map[int64]bool) []int64 {
 	keys := make([]int64, len(m))
 	i := 0
 	for s := range m {
@@ -71,9 +71,9 @@ func Int64BoolMapKeys(m map[int64]bool) []int64 {
 	return keys
 }
 
-// UpdateStrStrMap loads destination map into source map.
+// MapUpdateStrStr loads destination map into source map.
 // If dest is empty it will create a new map.
-func UpdateStrStrMap(source map[string]string, dest *map[string]string) {
+func MapUpdateStrStr(source map[string]string, dest *map[string]string) {
 	if len(source) == 0 {
 		return
 	}
@@ -87,8 +87,8 @@ func UpdateStrStrMap(source map[string]string, dest *map[string]string) {
 	*dest = d
 }
 
-// UpdateStrInterfaceMap  loads destination map into source map.
-func UpdateStrInterfaceMap(source map[string]interface{}, dest *map[string]interface{}) {
+// MapUpdateStrInterface  loads destination map into source map.
+func MapUpdateStrInterface(source map[string]interface{}, dest *map[string]interface{}) {
 	if len(source) == 0 {
 		return
 	}
@@ -102,8 +102,8 @@ func UpdateStrInterfaceMap(source map[string]interface{}, dest *map[string]inter
 	*dest = d
 }
 
-// CloneMapStrInterface will clone a given map[str]interface{} to a new one
-func CloneMapStrInterface(source map[string]interface{}) map[string]interface{} {
+// MapCloneStrInterface will clone a given map[str]interface{} to a new one
+func MapCloneStrInterface(source map[string]interface{}) map[string]interface{} {
 	d := make(map[string]interface{}, len(source))
 	for k, v := range source {
 		d[k] = v
@@ -111,8 +111,8 @@ func CloneMapStrInterface(source map[string]interface{}) map[string]interface{} 
 	return d
 }
 
-// CloneMapStrStr will clone a given map[string]string{} to a new one
-func CloneMapStrStr(source map[string]string) map[string]string {
+// MapCloneStrStr will clone a given map[string]string{} to a new one
+func MapCloneStrStr(source map[string]string) map[string]string {
 	d := make(map[string]string, len(source))
 	for k, v := range source {
 		d[k] = v
@@ -120,20 +120,20 @@ func CloneMapStrStr(source map[string]string) map[string]string {
 	return d
 }
 
-// StrSliceToMap creates a map from string slice for frequent search in slice
-func StrSliceToMap(ls []string) map[string]bool {
-	m := make(map[string]bool, len(ls))
+// SliceStrToMap creates a map from string slice for frequent search in slice
+func SliceStrToMap(ls []string) map[string]struct{} {
+	m := make(map[string]struct{}, len(ls))
 	for _, v := range ls {
-		m[v] = true
+		m[v] = struct{}{}
 	}
 	return m
 }
 
-// ReverseStrStrMap reverses keys and values of given map
+// MapReverseStrStr reverses keys and values of given map
 // If same value exists multiple times, the one with bigger key wins
 // to give deterministic ordering and to make it testable.
 // {"a": "1", "b": 1} -> {"1": "b"}
-func ReverseStrStrMap(m map[string]string) map[string]string {
+func MapReverseStrStr(m map[string]string) map[string]string {
 	r := make(map[string]string, len(m))
 	for k, v := range m {
 		if val, ok := r[v]; !ok || k > val {
@@ -143,8 +143,8 @@ func ReverseStrStrMap(m map[string]string) map[string]string {
 	return r
 }
 
-// GetAnyValueFromMapStrStr returns any values from the map or empty string if map is empty
-func GetAnyValueFromMapStrStr(m map[string]string) string {
+// MapStrStrGetAnyValue returns any values from the map or empty string if map is empty
+func MapStrStrGetAnyValue(m map[string]string) string {
 	for _, v := range m {
 		return v
 	}

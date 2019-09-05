@@ -3,11 +3,10 @@ package bat
 import (
 	"fmt"
 	"reflect"
-	"strings"
 )
 
-// StrSliceIdx returns first index of `x` in `slice` and -1 if `x` is not present.
-func StrSliceIdx(slice []string, x string) int {
+// SliceStrIdx returns first index of `x` in `slice` and -1 if `x` is not present.
+func SliceStrIdx(slice []string, x string) int {
 	for i, v := range slice {
 		if v == x {
 			return i
@@ -16,8 +15,8 @@ func StrSliceIdx(slice []string, x string) int {
 	return -1
 }
 
-// IntSliceIdx returns first index of `x` in `slice` and -1 if `x` is not present.
-func IntSliceIdx(slice []int, x int) int {
+// SliceIntIdx returns first index of `x` in `slice` and -1 if `x` is not present.
+func SliceIntIdx(slice []int, x int) int {
 	for i, v := range slice {
 		if v == x {
 			return i
@@ -26,8 +25,8 @@ func IntSliceIdx(slice []int, x int) int {
 	return -1
 }
 
-// StrSliceSliceIdx returns first index of `x` in `slices` and -1 if `x` is not present.
-func StrSliceSliceIdx(slices [][]string, x []string) int {
+// SliceStrSliceIdx returns first index of `x` in `slices` and -1 if `x` is not present.
+func SliceStrSliceIdx(slices [][]string, x []string) int {
 	for k, s := range slices {
 		if len(s) != len(x) {
 			goto out
@@ -53,8 +52,8 @@ func SliceIdx(slice []interface{}, x interface{}) int {
 	return -1
 }
 
-// StrSliceConcat concats all given string slices into a new slice
-func StrSliceConcat(slices ...[]string) []string {
+// SliceStrConcat concats all given string slices into a new slice
+func SliceStrConcat(slices ...[]string) []string {
 	var r []string
 	for _, s := range slices {
 		r = append(r, s...)
@@ -85,17 +84,17 @@ func StrsEq(a, b []string) bool {
 }
 
 // StrsOnlyWhitespace checks if input consists of only whitespace
-func StrsOnlyWhitespace(s []string) bool {
-	for _, elem := range s {
-		if strings.TrimSpace(elem) != "" {
+func StrsOnlyWhitespace(ss []string) bool {
+	for _, s := range ss {
+		if !StrIsWhitespace(s) {
 			return false
 		}
 	}
 	return true
 }
 
-// StrsSimilar behaves like StringsEq but order doesn't matter
-func StrsSimilar(a, b []string) bool {
+// StrsSame behaves like StringsEq but order doesn't matter
+func StrsSame(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -127,18 +126,19 @@ func ToInterfaceSlice(i interface{}) ([]interface{}, error) {
 	}
 }
 
-// StrSliceUniqueAppend appends given strings into source if not exist in source
-func StrSliceUniqueAppend(src []string, strs ...string) []string {
+// SliceStrUniqueAppend appends `strs` strings into source without excluding elements which
+// alread exist in `src`.
+func SliceStrUniqueAppend(src []string, strs ...string) []string {
 	for _, s := range strs {
-		if StrSliceIdx(src, s) < 0 {
+		if SliceStrIdx(src, s) < 0 {
 			src = append(src, s)
 		}
 	}
 	return src
 }
 
-// EmptyStrSliceAsNil returns initialized empty slice as nil
-func EmptyStrSliceAsNil(ls []string) []string {
+// SliceStrAsNil returns initialized empty slice as nil
+func SliceStrAsNil(ls []string) []string {
 	if len(ls) == 0 && ls != nil {
 		return nil
 	}
